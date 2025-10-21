@@ -3,10 +3,65 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Example</title>
+    <title>Toast Component Examples</title>
+    <link rel="stylesheet" href="/style.css">
 </head>
 <body>
-    <substrate-toast></substrate-toast>
+    <div class="container">
+        <h1>Toast Component</h1>
+        <p class="subtitle">A flexible toast notification component with variants, animations, and auto-dismiss</p>
+
+        <div class="section">
+            <h2>Variants</h2>
+            <div class="button-group">
+                <button id="btn-primary">Show Primary</button>
+                <button id="btn-success">Show Success</button>
+                <button id="btn-warning">Show Warning</button>
+                <button id="btn-danger">Show Danger</button>
+                <button id="btn-neutral">Show Neutral</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>With Close Button</h2>
+            <div class="button-group">
+                <button id="btn-closable-success">Closable Success</button>
+                <button id="btn-closable-warning">Closable Warning</button>
+                <button id="btn-closable-danger">Closable Danger</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Auto-dismiss</h2>
+            <div class="button-group">
+                <button id="btn-duration-3s">3 Second Toast</button>
+                <button id="btn-duration-5s">5 Second Toast</button>
+                <button id="btn-duration-10s">10 Second Toast</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Programmatic Control</h2>
+            <div class="button-group">
+                <button id="btn-show-manual">Show</button>
+                <button class="secondary" id="btn-hide-manual">Hide</button>
+            </div>
+            <div class="toast-container">
+                <substrate-toast id="manual-toast" variant="primary">
+                    <strong>Manual Toast</strong>
+                    <p>This toast is controlled via the show() and hide() methods.</p>
+                </substrate-toast>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Live Examples</h2>
+            <div class="toast-container" id="toast-container">
+                <!-- Toasts will be added here dynamically -->
+            </div>
+        </div>
+    </div>
+
     <script type="module" src="./index.ts"></script>
-  </body>
+</body>
 </html>
