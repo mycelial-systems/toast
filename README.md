@@ -211,7 +211,7 @@ el?.toast()
 ### HTML
 ```html
 <div>
-    <substrate-toast timeout="4000"></substrate-toast>
+    <substrate-toast timeout="4000">abc 123</substrate-toast>
 </div>
 ```
 
