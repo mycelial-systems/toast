@@ -16,6 +16,19 @@
 
 <!-- toc -->
 
+- [Install](#install)
+- [API](#api)
+  * [ESM](#esm)
+  * [Common JS](#common-js)
+- [CSS](#css)
+  * [Import CSS](#import-css)
+- [Use](#use)
+  * [JS](#js)
+  * [HTML](#html)
+  * [pre-built](#pre-built)
+
+<!-- tocstop -->
+
 ## Install
 
 ```sh
