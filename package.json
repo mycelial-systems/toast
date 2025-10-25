@@ -43,10 +43,10 @@
     }
   },
   "dependencies": {
-    "@substrate-system/web-component": "^0.0.36"
+    "@substrate-system/web-component": "^0.0.38"
   },
   "devDependencies": {
-    "@substrate-system/debug": "^0.9.0",
+    "@substrate-system/debug": "^0.9.30",
     "@substrate-system/dom": "^0.1.7",
     "@substrate-system/tapout": "^0.0.28",
     "@substrate-system/tapzero": "^0.10.15",
