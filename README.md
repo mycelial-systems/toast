@@ -23,6 +23,7 @@
   * [`open`](#open)
   * [`timeout`](#timeout)
   * [`closable`](#closable)
+  * [`timer`](#timer)
   * [Variants](#variants)
 - [Events](#events)
   * [`substrate-toast:show`](#substrate-toastshow)
@@ -97,6 +98,24 @@ Shows a close button that allows users to manually dismiss the toast.
 ```html
 <substrate-toast closable>
     Message with close button
+</substrate-toast>
+```
+
+### `timer`
+**Type:** Boolean
+**Default:** `true`
+
+Controls whether a visual countdown timer is displayed around the close button. The timer shows as a circular progress ring that shrinks clockwise as the timeout counts down. Only visible when `closable` is also enabled.
+
+```html
+<!-- With countdown timer (default) -->
+<substrate-toast closable timeout="5000">
+    Message with visual timer
+</substrate-toast>
+
+<!-- Without countdown timer -->
+<substrate-toast closable timeout="5000" timer="false">
+    Message without visual timer
 </substrate-toast>
 ```
 

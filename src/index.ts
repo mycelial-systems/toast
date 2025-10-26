@@ -58,14 +58,19 @@ const toastQueue:SubstrateToast[] = []  // eslint-disable-line
 let currentToast:SubstrateToast|null = null  // eslint-disable-line
 
 export class SubstrateToast extends WebComponent.create('substrate-toast') {
-    static observedAttributes = ['open', 'closable', 'timeout', ...VARIANTS]
+    static observedAttributes = ['open', 'closable', 'timeout', 'timer', ...VARIANTS]
     private _open = false
     private _variant:ToastVariant = 'neutral'
     private _closable = false
     private _timeout = 3000
+    private _showTimer = true
     private _timeoutId:number|null = null
     private _container:HTMLDivElement|null = null
     private _closeButton:HTMLButtonElement|null = null
+    private _closeWrapper:HTMLDivElement|null = null
+    private _progressCircle:SVGCircleElement|null = null
+    private _progressSvg:SVGSVGElement|null = null
+    private _startTime:number|null = null
 
     constructor () {
         super()
@@ -124,6 +129,10 @@ export class SubstrateToast extends WebComponent.create('substrate-toast') {
         this._open = newValue !== null
     }
 
+    handleChange_timer (_oldValue:string, newValue:string|null) {
+        this._showTimer = newValue !== null
+    }
+
     /**
      * Show the toast, use the timeout attribute.
      * Add toast to queue to be displayed sequentially.
@@ -145,12 +154,46 @@ export class SubstrateToast extends WebComponent.create('substrate-toast') {
 
         // Auto-hide after timeout
         if (this._timeout !== Infinity && this._timeout > 0) {
+            this._startTime = Date.now()
+            this._animateProgress()
             this._timeoutId = window.setTimeout(() => {
                 this.emit('hide', {
                     detail: { variant: this._variant }
                 })
                 this.hide()
             }, this._timeout)
+        }
+    }
+
+    /**
+     * Animate the progress ring around the close button
+     */
+    _animateProgress ():void {
+        if (!this._progressCircle || this._timeout === Infinity || !this._startTime) {
+            return
+        }
+
+        const elapsed = Date.now() - this._startTime
+        const progress = Math.min(elapsed / this._timeout, 1)
+
+        // Update the stroke-dashoffset to create the countdown effect
+        // Progress goes from 0 to 1, circle should start full and shrink to nothing
+        const circumference = 2 * Math.PI * 10  // radius is 10
+        const offset = circumference * progress
+        this._progressCircle.style.strokeDashoffset = offset.toString()
+
+        // Update aria-label with remaining time (update every second to avoid spam)
+        if (this._progressSvg) {
+            const remaining = Math.ceil((this._timeout - elapsed) / 1000)
+            const currentLabel = this._progressSvg.getAttribute('aria-label')
+            const newLabel = `Auto-dismiss in ${remaining} ${remaining === 1 ? 'second' : 'seconds'}`
+            if (currentLabel !== newLabel) {
+                this._progressSvg.setAttribute('aria-label', newLabel)
+            }
+        }
+
+        if (progress < 1) {
+            requestAnimationFrame(() => this._animateProgress())
         }
     }
 
@@ -227,6 +270,11 @@ export class SubstrateToast extends WebComponent.create('substrate-toast') {
 
         // Close button if closable
         if (this._closable) {
+            // Create wrapper for close button and progress ring
+            this._closeWrapper = document.createElement('div')
+            this._closeWrapper.className = 'toast-close-wrapper'
+
+            // Create the close button with X icon
             this._closeButton = document.createElement('button')
             this._closeButton.type = 'button'
             this._closeButton.className = 'toast-close'
@@ -236,7 +284,37 @@ export class SubstrateToast extends WebComponent.create('substrate-toast') {
                 </svg>
             `
             this._closeButton.addEventListener('click', () => this.hide())
-            this._container.appendChild(this._closeButton)
+
+            // Create SVG with progress ring (separate from button) - only if show-timer is enabled
+            if (this._showTimer) {
+                this._progressSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
+                this._progressSvg.setAttribute('viewBox', '0 0 24 24')
+                this._progressSvg.setAttribute('fill', 'none')
+                this._progressSvg.setAttribute('role', 'timer')
+                this._progressSvg.setAttribute('aria-label', `Auto-dismiss timer: ${this._timeout / 1000} seconds`)
+                this._progressSvg.setAttribute('aria-live', 'off')
+                this._progressSvg.classList.add('toast-progress-svg')
+
+                // Progress circle (background)
+                const progressBg = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+                progressBg.setAttribute('cx', '12')
+                progressBg.setAttribute('cy', '12')
+                progressBg.setAttribute('r', '10')
+                progressBg.classList.add('toast-progress-bg')
+                this._progressSvg.appendChild(progressBg)
+
+                // Progress circle (animated)
+                this._progressCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+                this._progressCircle.setAttribute('cx', '12')
+                this._progressCircle.setAttribute('cy', '12')
+                this._progressCircle.setAttribute('r', '10')
+                this._progressCircle.classList.add('toast-progress-circle')
+                this._progressSvg.appendChild(this._progressCircle)
+
+                this._closeWrapper.appendChild(this._progressSvg)
+            }
+            this._closeWrapper.appendChild(this._closeButton)
+            this._container.appendChild(this._closeWrapper)
         }
 
         // Clear and add container
