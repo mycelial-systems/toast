@@ -288,8 +288,8 @@ export class SubstrateToast extends WebComponent.create('substrate-toast') {
             this._closeButton.addEventListener('click', () => this.hide())
 
             // Create SVG with progress ring (separate from button) - only if
-            // show-timer is enabled
-            if (this._showTimer) {
+            // show-timer is enabled and timeout is not infinite
+            if (this._showTimer && this._timeout !== Infinity) {
                 this._progressSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
                 this._progressSvg.setAttribute('viewBox', '0 0 24 24')
                 this._progressSvg.setAttribute('fill', 'none')
