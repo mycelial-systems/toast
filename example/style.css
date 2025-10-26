@@ -46,7 +46,14 @@ body {
 }
 
 .toasters {
+    margin: 0 auto;
+    flex-wrap: wrap;
+    max-width: 30rem;
+    display: flex;
+    gap: 1rem;
+
     & button {
+        min-height: 2.6rem;
         background: var(--color-bg-button);
         color: var(--color-text-button);
         border: none;

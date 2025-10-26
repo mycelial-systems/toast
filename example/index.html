@@ -26,6 +26,7 @@
             <button id="neutral">Neutral</button>
             <button id="warning">Warning</button>
             <button id="permatoast">Permanent Toast</button>
+            <button id="no-timer">No Timer</button>
         </div>
     </div>
 
@@ -55,6 +56,16 @@
 
     <substrate-toast id="permanent-toast" neutral closable timeout="0">
         The permanent toast &hellip;
+    </substrate-toast>
+
+    <substrate-toast
+        id="no-timer-toast"
+        success
+        closable
+        timeout="5000"
+        timer="false"
+    >
+        Toast without visual timer &hellip;
     </substrate-toast>
 
     <script type="module" src="./index.ts"></script>

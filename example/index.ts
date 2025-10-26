@@ -28,3 +28,9 @@ byId('permatoast')?.addEventListener('click', ev => {
     const el = byId('permanent-toast') as SubstrateToast
     el.toast()
 })
+
+byId('no-timer')?.addEventListener('click', ev => {
+    ev.preventDefault()
+    const el = byId('no-timer-toast') as SubstrateToast
+    el.toast()
+})

@@ -86,6 +86,8 @@ export class SubstrateToast extends WebComponent.create('substrate-toast') {
             }
         }
 
+        this._showTimer = this.getAttribute('timer') !== 'false'
+
         // set _variant
         VARIANTS.forEach(v => {
             if (this.hasAttribute(v)) {
@@ -130,7 +132,7 @@ export class SubstrateToast extends WebComponent.create('substrate-toast') {
     }
 
     handleChange_timer (_oldValue:string, newValue:string|null) {
-        this._showTimer = newValue !== null
+        this._showTimer = newValue !== 'false'
     }
 
     /**
@@ -285,7 +287,8 @@ export class SubstrateToast extends WebComponent.create('substrate-toast') {
             `
             this._closeButton.addEventListener('click', () => this.hide())
 
-            // Create SVG with progress ring (separate from button) - only if show-timer is enabled
+            // Create SVG with progress ring (separate from button) - only if
+            // show-timer is enabled
             if (this._showTimer) {
                 this._progressSvg = document.createElementNS('http://www.w3.org/2000/svg', 'svg')
                 this._progressSvg.setAttribute('viewBox', '0 0 24 24')
