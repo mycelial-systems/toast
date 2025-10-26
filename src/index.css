@@ -15,7 +15,7 @@
 substrate-toast {
     --toast-padding: 1rem;
     --toast-gap: 0.75rem;
-    --toast-font-size: 0.875rem;
+    --toast-font-size: 1rem;
     --toast-line-height: 1.5;
     --toast-max-width: 24rem;
     --toast-border: #0003;

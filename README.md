@@ -209,6 +209,62 @@ Or minified:
 import '@substrate-system/toast/css/min'
 ```
 
+### CSS Variables
+
+You can override these CSS variables:
+
+#### Layout & Typography
+- `--toast-padding` - Internal padding of the toast (default: `1rem`)
+- `--toast-gap` - Gap between icon, content,
+  and close button (default: `0.75rem`)
+- `--toast-font-size` - Font size of toast content (default: `1rem`)
+- `--toast-line-height` - Line height of toast content (default: `1.5`)
+- `--toast-max-width` - Maximum width of the toast (default: `24rem`)
+- `--toast-border` - Border color (default: `#0003`)
+
+#### Primary Variant
+- `--toast-primary-bg` - Background color (default: `#fff`)
+- `--toast-primary-border` - Left border color (default: `#3b82f6`)
+- `--toast-primary-text` - Text color (default: `#1e40af`)
+- `--toast-primary-icon` - Icon color (default: `#3b82f6`)
+
+#### Success Variant
+- `--toast-success-bg` - Background color (default: `#fdfefd`)
+- `--toast-success-border` - Left border color (default: `#10b981`)
+- `--toast-success-text` - Text color (default: `#065f46`)
+- `--toast-success-icon` - Icon color (default: `#10b981`)
+
+#### Neutral Variant
+- `--toast-neutral-bg` - Background color (default: `#f9fafb`)
+- `--toast-neutral-border` - Left border color (default: `#6b7280`)
+- `--toast-neutral-text` - Text color (default: `#374151`)
+- `--toast-neutral-icon` - Icon color (default: `#6b7280`)
+
+#### Warning Variant
+- `--toast-warning-bg` - Background color (default: `#fbfaf6`)
+- `--toast-warning-border` - Left border color (default: `#f59e0b`)
+- `--toast-warning-text` - Text color (default: `#92400e`)
+- `--toast-warning-icon` - Icon color (default: `#f59e0b`)
+
+#### Danger Variant
+- `--toast-danger-bg` - Background color (default: `#fff`)
+- `--toast-danger-border` - Left border color (default: `#ef4444`)
+- `--toast-danger-text` - Text color (default: `#991b1b`)
+- `--toast-danger-icon` - Icon color (default: `#ef4444`)
+
+#### Example
+```css
+substrate-toast {
+    --toast-padding: 1.5rem;
+    --toast-max-width: 30rem;
+    --toast-success-bg: #e6f7ed;
+    --toast-success-border: #22c55e;
+}
+```
+
+-------
+
+
 ## Use
 
 This calls the global function `customElements.define`. Just import, then use
