@@ -33,10 +33,20 @@
   * [`hide()`](#hide)
 - [CSS](#css)
   * [Import CSS](#import-css)
+  * [CSS Variables](#css-variables)
+    + [Layout & Typography](#layout--typography)
+    + [Primary Variant](#primary-variant)
+    + [Success Variant](#success-variant)
+    + [Neutral Variant](#neutral-variant)
+    + [Warning Variant](#warning-variant)
+    + [Danger Variant](#danger-variant)
+    + [Example](#example)
 - [Use](#use)
   * [JS](#js)
   * [HTML](#html)
   * [pre-built](#pre-built)
+    + [copy](#copy)
+    + [HTML Example](#html-example)
 
 <!-- tocstop -->
 
@@ -58,6 +68,36 @@ import { SubstrateToast } from '@substrate-system/toast'
 ### Common JS
 ```js
 const Toast = require('@substrate-system/toast')
+```
+
+## Example
+
+```ts
+import '@substrate-system/toast'
+
+// Create a toast element
+const toast = document.createElement('substrate-toast')
+toast.textContent = 'Operation completed successfully!'
+toast.setAttribute('success', '')
+toast.setAttribute('closable', '')
+toast.setAttribute('timeout', '5000')
+document.body.appendChild(toast)
+
+// Show the toast
+toast.toast()
+```
+
+### Example CSS
+
+Set the toast position to be center bottom (default is top right).
+
+```css
+substrate-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 2rem;
+    transform: translateX(-50%);
+}
 ```
 
 ## Attributes
@@ -252,7 +292,8 @@ You can override these CSS variables:
 - `--toast-danger-text` - Text color (default: `#991b1b`)
 - `--toast-danger-icon` - Icon color (default: `#ef4444`)
 
-#### Example
+#### CSS Variable Example
+
 ```css
 substrate-toast {
     --toast-padding: 1.5rem;
@@ -261,6 +302,7 @@ substrate-toast {
     --toast-success-border: #22c55e;
 }
 ```
+
 
 -------
 
@@ -301,7 +343,8 @@ cp ./node_modules/@substrate-system/toast/dist/index.min.js ./public/substrate-t
 cp ./node_modules/@substrate-system/toast/dist/style.min.css ./public/substrate-toast.css
 ```
 
-#### HTML
+#### HTML Example
+
 ```html
 <head>
     <link rel="stylesheet" href="./substrate-toast.css">
