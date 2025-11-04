@@ -62,7 +62,7 @@ export class SubstrateToast extends WebComponent.create('substrate-toast') {
     private _open = false
     private _variant:ToastVariant = 'neutral'
     private _closable = false
-    private _timeout = 3000
+    private _timeout = 6000
     private _showTimer = true
     private _timeoutId:number|null = null
     private _container:HTMLDivElement|null = null
