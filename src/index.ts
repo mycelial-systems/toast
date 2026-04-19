@@ -58,7 +58,14 @@ const toastQueue:SubstrateToast[] = []  // eslint-disable-line
 let currentToast:SubstrateToast|null = null  // eslint-disable-line
 
 export class SubstrateToast extends WebComponent.create('substrate-toast') {
-    static observedAttributes = ['open', 'noclose', 'timeout', 'notimer', ...VARIANTS]
+    static observedAttributes = [
+        'open',
+        'noclose',
+        'timeout',
+        'notimer',
+        ...VARIANTS
+    ]
+
     private _open = false
     private _variant:ToastVariant = 'neutral'
     private _noClose:boolean = false
@@ -72,7 +79,7 @@ export class SubstrateToast extends WebComponent.create('substrate-toast') {
     private _progressSvg:SVGSVGElement|null = null
     private _startTime:number|null = null
 
-    DEFAULT_TIMEOUT:number = 3000
+    DEFAULT_TIMEOUT:number = 6000
 
     constructor () {
         super()
@@ -108,11 +115,26 @@ export class SubstrateToast extends WebComponent.create('substrate-toast') {
         }
     }
 
-    async attributeChangedCallback (name:string, oldValue:string, newValue:string) {
-        super.attributeChangedCallback(name, oldValue, newValue)
-        const variant = VARIANTS[name]
-        if (!variant) return
-        this._variant = variant
+    async attributeChangedCallback (
+        name:string,
+        oldValue:string|null,
+        newValue:string|null
+    ) {
+        super.attributeChangedCallback(
+            name,
+            oldValue as string,
+            newValue as string
+        )
+        if (!VARIANTS.includes(name as ToastVariant)) return
+        if (newValue !== null) {
+            this._variant = name as ToastVariant
+        } else {
+            const activeVariant = VARIANTS.find(variant => {
+                return this.hasAttribute(variant)
+            })
+            this._variant = activeVariant || 'neutral'
+        }
+        this._syncVariantUi()
     }
 
     /**
@@ -121,12 +143,12 @@ export class SubstrateToast extends WebComponent.create('substrate-toast') {
      */
     handleChange_timeout (_oldValue:string, newValue:string) {
         const val = parseInt(newValue)
-        // set _timeout to either infinity, or if NaN, 3000, or the value
-        this._timeout = val === 0 ? Infinity : (val || 3000)
+        // set _timeout to either infinity, or if NaN, then default
+        this._timeout = val === 0 ? Infinity : (val || this.DEFAULT_TIMEOUT)
     }
 
     handleChange_noclose (_oldValue:string, newValue:string|null) {
-        debug('in closable handler', newValue)
+        debug('in noclose handler', newValue)
         this._noClose = (newValue !== null)
         if (this._noClose) {
             this._timeout = Infinity
@@ -144,8 +166,8 @@ export class SubstrateToast extends WebComponent.create('substrate-toast') {
         this._open = newValue !== null
     }
 
-    handleChange_timer (_oldValue:string, newValue:string|null) {
-        this._showTimer = newValue !== 'false'
+    handleChange_notimer (_oldValue:string, newValue:string|null) {
+        this._showTimer = (newValue === null)
     }
 
     /**
@@ -257,6 +279,17 @@ export class SubstrateToast extends WebComponent.create('substrate-toast') {
         return icons[this._variant] || icons.neutral
     }
 
+    _syncVariantUi () {
+        if (!this._container) return
+
+        this._container.className = `toast toast-${this._variant}`
+
+        const icon = this._container.querySelector('.toast-icon')
+        if (icon) {
+            icon.innerHTML = this.getIconSvg()
+        }
+    }
+
     render () {
         // Don't re-render if already rendered
         if (this._container) return
@@ -265,7 +298,6 @@ export class SubstrateToast extends WebComponent.create('substrate-toast') {
         const existingContent = this.innerHTML
 
         this._container = document.createElement('div')
-        this._container.className = `toast toast-${this._variant}`
         this._container.setAttribute('role', 'status')
         this._container.setAttribute('aria-live', 'polite')
         this._container.setAttribute('aria-atomic', 'true')
@@ -273,7 +305,6 @@ export class SubstrateToast extends WebComponent.create('substrate-toast') {
         // Icon
         const icon = document.createElement('div')
         icon.className = 'toast-icon'
-        icon.innerHTML = this.getIconSvg()
         this._container.appendChild(icon)
 
         // Content
@@ -283,7 +314,7 @@ export class SubstrateToast extends WebComponent.create('substrate-toast') {
 
         this._container.appendChild(content)
 
-        // Close button if closable
+        // Render a close button unless `noclose` is present.
         if (!this._noClose) {
             // Create wrapper for close button and progress ring
             this._closeWrapper = document.createElement('div')
@@ -336,6 +367,7 @@ export class SubstrateToast extends WebComponent.create('substrate-toast') {
         // Clear and add container
         this.innerHTML = ''
         this.appendChild(this._container)
+        this._syncVariantUi()
     }
 }
 
