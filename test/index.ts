@@ -66,11 +66,11 @@ test('should have timeout attribute', async t => {
         'Should have timeout attribute')
 })
 
-test('should show close button when closable', async t => {
+test('should show close button by default', async t => {
     clearToasts()
     document.body.innerHTML = `
-        <substrate-toast closable open>
-            Closable message
+        <substrate-toast open>
+            Message with close button
         </substrate-toast>
     `
 
@@ -78,11 +78,11 @@ test('should show close button when closable', async t => {
     t.ok(closeButton, 'Should render close button')
 })
 
-test('should not show close button by default', async t => {
+test('should not show close button when noclose', async t => {
     clearToasts()
     document.body.innerHTML = `
-        <substrate-toast open>
-            Not closable
+        <substrate-toast noclose open>
+            No close button
         </substrate-toast>
     `
 
@@ -99,7 +99,7 @@ test('clicking close button should call hide', async t => {
     clearToasts()
 
     document.body.innerHTML = `
-        <substrate-toast closable open timeout="0">
+        <substrate-toast open timeout="0">
             Click to close
         </substrate-toast>
     `
@@ -202,6 +202,47 @@ test('should have warning variant', async t => {
     const toast = await waitFor('substrate-toast') as SubstrateToast
     t.ok(toast, 'Toast should exist')
     t.ok(toast.hasAttribute('warning'), 'Should have warning attribute')
+})
+
+test('should update variant class and icon when variant changes', async t => {
+    clearToasts()
+
+    const toast = document.createElement('substrate-toast')
+    toast.textContent = 'Variant change'
+    document.body.appendChild(toast)
+
+    const inner = await waitFor('substrate-toast .toast')
+    const icon = toast.querySelector('.toast-icon')
+    const initialIcon = icon?.innerHTML
+
+    toast.setAttribute('success', '')
+    await Promise.resolve()
+
+    t.ok(inner?.classList.contains('toast-success'),
+        'Should update to the success class')
+    t.notEqual(icon?.innerHTML, initialIcon,
+        'Should update the icon for the new variant')
+})
+
+test('should return to neutral when variant attribute is removed', async t => {
+    clearToasts()
+
+    const toast = document.createElement('substrate-toast')
+    toast.textContent = 'Variant removal'
+    document.body.appendChild(toast)
+
+    const inner = await waitFor('substrate-toast .toast')
+
+    toast.setAttribute('success', '')
+    await Promise.resolve()
+    t.ok(inner?.classList.contains('toast-success'),
+        'Should set the success class before removal')
+
+    toast.removeAttribute('success')
+    await Promise.resolve()
+
+    t.ok(inner?.classList.contains('toast-neutral'),
+        'Should fall back to the neutral class after removal')
 })
 
 // ============================================================================

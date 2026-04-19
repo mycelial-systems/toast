@@ -120,12 +120,13 @@ Automatically displays the toast when the component is connected to the DOM.
 **Default:** `3000`
 
 Controls how long the toast is displayed before automatically hiding.
-Set to `0` for infinite display (toast will not auto-hide). When `noclose` attribute is present, timeout is automatically set to infinite.
+Set to `0` for infinite display (toast will not auto-hide). When
+`noclose` is present, timeout is automatically set to infinite.
 
 ```html
 <substrate-toast timeout="5000">Shows for 5 seconds</substrate-toast>
 
-<substrate-toast timeout="0" closable>
+<substrate-toast timeout="0">
     Shows until manually closed
 </substrate-toast>
 ```
@@ -134,7 +135,9 @@ Set to `0` for infinite display (toast will not auto-hide). When `noclose` attri
 **Type:** Boolean
 **Default:** `false`
 
-When present, hides the close button and prevents manual dismissal. When absent, shows a close button allowing users to manually dismiss the toast. Also sets timeout to infinite when present.
+When present, hides the close button and prevents manual dismissal. When
+absent, shows a close button that lets users manually dismiss the toast.
+It also sets timeout to infinite.
 
 ```html
 <substrate-toast noclose>
@@ -150,7 +153,9 @@ When present, hides the close button and prevents manual dismissal. When absent,
 **Type:** Boolean
 **Default:** `false`
 
-When present, hides the visual countdown timer. The timer shows as a circular progress ring that shrinks clockwise as the timeout counts down. Only visible when a close button is present (when `noclose` is not set).
+When present, hides the visual countdown timer. The timer shows as a
+circular progress ring that shrinks clockwise as the timeout counts
+down. It is only visible when a close button is present.
 
 ```html
 <!-- With countdown timer (default) -->
