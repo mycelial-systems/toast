@@ -24,8 +24,8 @@
 - [Attributes](#attributes)
   * [`open`](#open)
   * [`timeout`](#timeout)
-  * [`closable`](#closable)
-  * [`timer`](#timer)
+  * [`noclose`](#noclose)
+  * [`notimer`](#notimer)
   * [Variants](#variants)
 - [Events](#events)
   * [`substrate-toast:show`](#substrate-toastshow)
@@ -81,7 +81,6 @@ import '@substrate-system/toast'
 const toast = document.createElement('substrate-toast')
 toast.textContent = 'Operation completed successfully!'
 toast.setAttribute('success', '')
-toast.setAttribute('closable', '')
 toast.setAttribute('timeout', '5000')
 document.body.appendChild(toast)
 
@@ -121,7 +120,7 @@ Automatically displays the toast when the component is connected to the DOM.
 **Default:** `3000`
 
 Controls how long the toast is displayed before automatically hiding.
-Set to `0` for infinite display (toast will not auto-hide).
+Set to `0` for infinite display (toast will not auto-hide). When `noclose` attribute is present, timeout is automatically set to infinite.
 
 ```html
 <substrate-toast timeout="5000">Shows for 5 seconds</substrate-toast>
@@ -131,32 +130,36 @@ Set to `0` for infinite display (toast will not auto-hide).
 </substrate-toast>
 ```
 
-### `closable`
+### `noclose`
 **Type:** Boolean
 **Default:** `false`
 
-Shows a close button that allows users to manually dismiss the toast.
+When present, hides the close button and prevents manual dismissal. When absent, shows a close button allowing users to manually dismiss the toast. Also sets timeout to infinite when present.
 
 ```html
-<substrate-toast closable>
+<substrate-toast noclose>
+    Message without close button
+</substrate-toast>
+
+<substrate-toast>
     Message with close button
 </substrate-toast>
 ```
 
-### `timer`
+### `notimer`
 **Type:** Boolean
-**Default:** `true`
+**Default:** `false`
 
-Controls whether a visual countdown timer is displayed around the close button. The timer shows as a circular progress ring that shrinks clockwise as the timeout counts down. Only visible when `closable` is also enabled.
+When present, hides the visual countdown timer. The timer shows as a circular progress ring that shrinks clockwise as the timeout counts down. Only visible when a close button is present (when `noclose` is not set).
 
 ```html
 <!-- With countdown timer (default) -->
-<substrate-toast closable timeout="5000">
+<substrate-toast timeout="5000">
     Message with visual timer
 </substrate-toast>
 
 <!-- Without countdown timer -->
-<substrate-toast closable timeout="5000" timer="false">
+<substrate-toast timeout="5000" notimer>
     Message without visual timer
 </substrate-toast>
 ```
@@ -183,6 +186,9 @@ be present.
 <substrate-toast warning>Please review your settings.</substrate-toast>
 <substrate-toast danger>An error occurred.</substrate-toast>
 <substrate-toast primary>Information message.</substrate-toast>
+
+<!-- Without close button -->
+<substrate-toast success noclose>Operation successful!</substrate-toast>
 ```
 
 ## Events
@@ -316,7 +322,8 @@ the tag in your HTML.
 
 ### JS
 The default timeout is 3 seconds. Set the time in milliseconds by passing
-in the `timeout` attribute.
+in the `timeout` attribute. Use the `noclose` attribute to hide the close
+button and prevent manual dismissal.
 
 ```js
 import '@substrate-system/toast'
@@ -331,6 +338,11 @@ el?.toast()
 ```html
 <div>
     <substrate-toast timeout="4000">abc 123</substrate-toast>
+</div>
+
+<!-- No close button -->
+<div>
+    <substrate-toast timeout="4000" noclose>abc 123</substrate-toast>
 </div>
 ```
 
