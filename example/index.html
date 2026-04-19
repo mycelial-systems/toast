@@ -30,40 +30,35 @@
         </div>
     </div>
 
-    <substrate-toast class="success" success closable>
-        This is a toast notification &hellip;
+    <substrate-toast class="example" success>
+        This is a toast notification, triggered by button click &hellip;
     </substrate-toast>
 
-    <substrate-toast class="success" success closable open>
+    <substrate-toast class="success" success open>
         This is a toast notification &hellip;
     </substrate-toast>
 
     <!-- ['primary', 'success', 'neutral', 'warning', 'danger'] -->
 
-    <substrate-toast class="danger" danger closable>
+    <substrate-toast class="danger" danger>
         This is an error toast &hellip;
     </substrate-toast>
 
-    <substrate-toast class="primary" primary closable>
+    <substrate-toast class="primary" primary>
         Primary
     </substrate-toast>
-    <substrate-toast class="neutral" neutral closable>
+    <substrate-toast class="neutral" neutral>
         Neutral
     </substrate-toast>
-    <substrate-toast class="warning" warning closable>
+    <substrate-toast class="warning" warning>
         Warning
     </substrate-toast>
 
-    <substrate-toast id="permanent-toast" neutral closable>
+    <substrate-toast id="permanent-toast" neutral noclose>
         The permanent toast &hellip;
     </substrate-toast>
 
-    <substrate-toast
-        id="no-timer-toast"
-        success
-        closable
-        timer="false"
-    >
+    <substrate-toast id="no-timer-toast" success notimer>
         Toast without visual timer &hellip;
     </substrate-toast>
 

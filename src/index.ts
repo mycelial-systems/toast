@@ -58,12 +58,12 @@ const toastQueue:SubstrateToast[] = []  // eslint-disable-line
 let currentToast:SubstrateToast|null = null  // eslint-disable-line
 
 export class SubstrateToast extends WebComponent.create('substrate-toast') {
-    static observedAttributes = ['open', 'closable', 'timeout', 'timer', ...VARIANTS]
+    static observedAttributes = ['open', 'noclose', 'timeout', 'notimer', ...VARIANTS]
     private _open = false
     private _variant:ToastVariant = 'neutral'
-    private _closable = false
+    private _noClose:boolean = false
     private _timeout = 6000
-    private _showTimer = true
+    private _showTimer:boolean = true
     private _timeoutId:number|null = null
     private _container:HTMLDivElement|null = null
     private _closeButton:HTMLButtonElement|null = null
@@ -72,6 +72,8 @@ export class SubstrateToast extends WebComponent.create('substrate-toast') {
     private _progressSvg:SVGSVGElement|null = null
     private _startTime:number|null = null
 
+    DEFAULT_TIMEOUT:number = 3000
+
     constructor () {
         super()
         if (this.hasAttribute('open')) {
@@ -79,14 +81,14 @@ export class SubstrateToast extends WebComponent.create('substrate-toast') {
         }
 
         const timeoutAttr = this.getAttribute('timeout')
-        if (timeoutAttr !== null) {
+        if (timeoutAttr !== null) {  // if a timeout was passed in
             const timeout = parseInt(timeoutAttr)
             if (timeout === 0) {
                 this._timeout = Infinity
             }
         }
 
-        this._showTimer = this.getAttribute('timer') !== 'false'
+        this._showTimer = !(this.hasAttribute('notimer'))
 
         // set _variant
         VARIANTS.forEach(v => {
@@ -123,8 +125,19 @@ export class SubstrateToast extends WebComponent.create('substrate-toast') {
         this._timeout = val === 0 ? Infinity : (val || 3000)
     }
 
-    handleChange_closable (_oldValue:string, newValue:string|null) {
-        this._closable = newValue !== null
+    handleChange_noclose (_oldValue:string, newValue:string|null) {
+        debug('in closable handler', newValue)
+        this._noClose = (newValue !== null)
+        if (this._noClose) {
+            this._timeout = Infinity
+        } else {
+            const timeoutAttr = this.getAttribute('timeout')
+            if (timeoutAttr) {
+                this._timeout = parseInt(timeoutAttr)
+            } else {
+                this._timeout = this.DEFAULT_TIMEOUT
+            }
+        }
     }
 
     handleChange_open (_oldValue:string, newValue:string|null) {
@@ -271,7 +284,7 @@ export class SubstrateToast extends WebComponent.create('substrate-toast') {
         this._container.appendChild(content)
 
         // Close button if closable
-        if (this._closable) {
+        if (!this._noClose) {
             // Create wrapper for close button and progress ring
             this._closeWrapper = document.createElement('div')
             this._closeWrapper.className = 'toast-close-wrapper'
